@@ -45,15 +45,15 @@ func (c *Client) RdGetUser() (rdUserSchema, error) {
 * Params:
 * returns: all the torrents added by the user
  */
-func (c *Client) rdGetTorrents() ([]rdTorrentSchema, error) {
+func (c *Client) RdGetTorrents() ([]rdTorrentSchema, error) {
 	resBody, err := c.GetReq("/torrents")
 	if err != nil {
-		return nil, fmt.Errorf("Couldnt get user")
+		return nil, fmt.Errorf("couldnt get user")
 	}
 
 	torrents := []rdTorrentSchema{}
 	if err := json.Unmarshal(resBody, &torrents); err != nil {
-		return nil, fmt.Errorf("Decode failed")
+		return nil, fmt.Errorf("decode failed")
 	}
 
 	return torrents, nil
@@ -63,7 +63,7 @@ func (c *Client) rdGetTorrents() ([]rdTorrentSchema, error) {
 * Params: magnet link string
 * returns: id and url of the torrent added
  */
-func (c *Client) rdAddMagnet(magnet string) (rdAddMagnetSchema, error) {
+func (c *Client) RdAddMagnet(magnet string) (rdAddMagnetSchema, error) {
 	data := url.Values{}
 	data.Set("magnet", magnet)
 
@@ -74,7 +74,7 @@ func (c *Client) rdAddMagnet(magnet string) (rdAddMagnetSchema, error) {
 
 	mag := rdAddMagnetSchema{}
 	if err := json.Unmarshal(resBody, &mag); err != nil {
-		return rdAddMagnetSchema{}, fmt.Errorf("Decode failed")
+		return rdAddMagnetSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return mag, nil
@@ -84,7 +84,7 @@ func (c *Client) rdAddMagnet(magnet string) (rdAddMagnetSchema, error) {
 * Params: Id of the torrrent whose info is needed
 * returns: all the details of the torrent in json format
  */
-func (c *Client) rdGetFileInfo(id string) (rdTorrentInfoSchema, error) {
+func (c *Client) RdGetFileInfo(id string) (rdTorrentInfoSchema, error) {
 
 	resBody, err := c.GetReq(fmt.Sprintf("/torrents/info/%s", id))
 	if err != nil {
@@ -93,7 +93,7 @@ func (c *Client) rdGetFileInfo(id string) (rdTorrentInfoSchema, error) {
 
 	fileInfo := rdTorrentInfoSchema{}
 	if err := json.Unmarshal(resBody, &fileInfo); err != nil {
-		return rdTorrentInfoSchema{}, fmt.Errorf("Decode failed")
+		return rdTorrentInfoSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return fileInfo, nil
@@ -103,11 +103,11 @@ func (c *Client) rdGetFileInfo(id string) (rdTorrentInfoSchema, error) {
 * Params: Id of the torrent, we can get id from /torrents/info
 * returns: Nothing
  */
-func (c *Client) rdSelectFiles(id string) error {
+func (c *Client) RdSelectFiles(id string) error {
 
-	torrentFiles, err := c.rdGetFileInfo(id)
+	torrentFiles, err := c.RdGetFileInfo(id)
 	if err != nil {
-		fmt.Errorf("Couldnt get files from the torrent")
+		fmt.Errorf("couldnt get files from the torrent")
 	}
 
 	files := GetFileIdsFromTorrent(torrentFiles)
@@ -119,7 +119,7 @@ func (c *Client) rdSelectFiles(id string) error {
 	fmt.Println(string(req))
 
 	if err != nil {
-		fmt.Errorf("Couldnt make the request")
+		fmt.Errorf("couldnt make the request")
 	}
 	return nil
 }
@@ -128,7 +128,7 @@ func (c *Client) rdSelectFiles(id string) error {
 * Params: Link to the torrent
 * returns: Unrestricted real-debrid link which can be downloaded by aria
  */
-func (c *Client) rdUnrestrictLinks(link string) (UnrestrictLink, error) {
+func (c *Client) RdUnrestrictLinks(link string) (UnrestrictLink, error) {
 	data := url.Values{}
 	data.Set("link", link)
 
@@ -139,7 +139,7 @@ func (c *Client) rdUnrestrictLinks(link string) (UnrestrictLink, error) {
 
 	getLink := UnrestrictLink{}
 	if err := json.Unmarshal(resp, &getLink); err != nil {
-		return UnrestrictLink{}, fmt.Errorf("Decode failed")
+		return UnrestrictLink{}, fmt.Errorf("decode failed")
 	}
 
 	return getLink, nil
@@ -149,15 +149,15 @@ func (c *Client) rdUnrestrictLinks(link string) (UnrestrictLink, error) {
 * Params: None
 * Returns: List of user's downloads
  */
-func (c *Client) rdGetDownloads() ([]rdDownloadSchema, error) {
+func (c *Client) RdGetDownloads() ([]rdDownloadSchema, error) {
 	resBody, err := c.GetReq("/downloads")
 	if err != nil {
-		return nil, fmt.Errorf("Couldn't get downloads")
+		return nil, fmt.Errorf("couldn't get downloads")
 	}
 
 	downloads := []rdDownloadSchema{}
 	if err := json.Unmarshal(resBody, &downloads); err != nil {
-		return nil, fmt.Errorf("Decode failed")
+		return nil, fmt.Errorf("decode failed")
 	}
 
 	return downloads, nil
@@ -167,15 +167,15 @@ func (c *Client) rdGetDownloads() ([]rdDownloadSchema, error) {
 * Params: None
 * Returns: List of supported hosts
  */
-func (c *Client) rdGetHosts() ([]rdHostSchema, error) {
+func (c *Client) RdGetHosts() ([]rdHostSchema, error) {
 	resBody, err := c.GetReq("/hosts")
 	if err != nil {
-		return nil, fmt.Errorf("Couldn't get hosts")
+		return nil, fmt.Errorf("couldn't get hosts")
 	}
 
 	hosts := []rdHostSchema{}
 	if err := json.Unmarshal(resBody, &hosts); err != nil {
-		return nil, fmt.Errorf("Decode failed")
+		return nil, fmt.Errorf("decode failed")
 	}
 
 	return hosts, nil
@@ -185,15 +185,15 @@ func (c *Client) rdGetHosts() ([]rdHostSchema, error) {
 * Params: None
 * Returns: User's traffic details
  */
-func (c *Client) rdGetTraffic() (rdTrafficSchema, error) {
+func (c *Client) RdGetTraffic() (rdTrafficSchema, error) {
 	resBody, err := c.GetReq("/traffic")
 	if err != nil {
-		return rdTrafficSchema{}, fmt.Errorf("Couldn't get traffic details")
+		return rdTrafficSchema{}, fmt.Errorf("couldn't get traffic details")
 	}
 
 	traffic := rdTrafficSchema{}
 	if err := json.Unmarshal(resBody, &traffic); err != nil {
-		return rdTrafficSchema{}, fmt.Errorf("Decode failed")
+		return rdTrafficSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return traffic, nil
@@ -203,15 +203,15 @@ func (c *Client) rdGetTraffic() (rdTrafficSchema, error) {
 * Params: None
 * Returns: Device code for user authentication
  */
-func (c *Client) rdGetDeviceCode() (rdDeviceCodeSchema, error) {
+func (c *Client) RdGetDeviceCode() (rdDeviceCodeSchema, error) {
 	resBody, err := c.GetReq("/device/code")
 	if err != nil {
-		return rdDeviceCodeSchema{}, fmt.Errorf("Couldn't get device code")
+		return rdDeviceCodeSchema{}, fmt.Errorf("couldn't get device code")
 	}
 
 	deviceCode := rdDeviceCodeSchema{}
 	if err := json.Unmarshal(resBody, &deviceCode); err != nil {
-		return rdDeviceCodeSchema{}, fmt.Errorf("Decode failed")
+		return rdDeviceCodeSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return deviceCode, nil
@@ -221,7 +221,7 @@ func (c *Client) rdGetDeviceCode() (rdDeviceCodeSchema, error) {
 * Params: Device code
 * Returns: Device credentials for user authentication
  */
-func (c *Client) rdGetDeviceCredentials(deviceCode string) (rdDeviceCredentialsSchema, error) {
+func (c *Client) RdGetDeviceCredentials(deviceCode string) (rdDeviceCredentialsSchema, error) {
 	data := url.Values{}
 	data.Set("code", deviceCode)
 
@@ -232,13 +232,13 @@ func (c *Client) rdGetDeviceCredentials(deviceCode string) (rdDeviceCredentialsS
 
 	credentials := rdDeviceCredentialsSchema{}
 	if err := json.Unmarshal(resBody, &credentials); err != nil {
-		return rdDeviceCredentialsSchema{}, fmt.Errorf("Decode failed")
+		return rdDeviceCredentialsSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return credentials, nil
 }
 
-func (c *Client) rdGetTranscode(fileId string) (rdTranscodeSchema, error) {
+func (c *Client) RdGetTranscode(fileId string) (rdTranscodeSchema, error) {
 	data := url.Values{}
 	data.Set("id", fileId)
 
@@ -249,7 +249,7 @@ func (c *Client) rdGetTranscode(fileId string) (rdTranscodeSchema, error) {
 
 	transcode := rdTranscodeSchema{}
 	if err := json.Unmarshal(resBody, &transcode); err != nil {
-		return rdTranscodeSchema{}, fmt.Errorf("Decode failed")
+		return rdTranscodeSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return transcode, nil
@@ -259,15 +259,15 @@ func (c *Client) rdGetTranscode(fileId string) (rdTranscodeSchema, error) {
 * Params: Download ID
 * Returns: Delete download result
  */
-func (c *Client) rdDeleteDownload(downloadId string) (rdDeleteDownloadSchema, error) {
+func (c *Client) RdDeleteDownload(downloadId string) (rdDeleteDownloadSchema, error) {
 	resBody, err := c.GetReq("/downloads/delete/" + downloadId)
 	if err != nil {
-		return rdDeleteDownloadSchema{}, fmt.Errorf("Couldn't delete download")
+		return rdDeleteDownloadSchema{}, fmt.Errorf("couldn't delete download")
 	}
 
 	deleteResult := rdDeleteDownloadSchema{}
 	if err := json.Unmarshal(resBody, &deleteResult); err != nil {
-		return rdDeleteDownloadSchema{}, fmt.Errorf("Decode failed")
+		return rdDeleteDownloadSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return deleteResult, nil
@@ -277,15 +277,15 @@ func (c *Client) rdDeleteDownload(downloadId string) (rdDeleteDownloadSchema, er
 * Params: None
 * Returns: Clear downloads result
  */
-func (c *Client) rdClearDownloads() (rdClearDownloadSchema, error) {
+func (c *Client) RdClearDownloads() (rdClearDownloadSchema, error) {
 	resBody, err := c.GetReq("/downloads/clear")
 	if err != nil {
-		return rdClearDownloadSchema{}, fmt.Errorf("Couldn't clear downloads")
+		return rdClearDownloadSchema{}, fmt.Errorf("couldn't clear downloads")
 	}
 
 	clearResult := rdClearDownloadSchema{}
 	if err := json.Unmarshal(resBody, &clearResult); err != nil {
-		return rdClearDownloadSchema{}, fmt.Errorf("Decode failed")
+		return rdClearDownloadSchema{}, fmt.Errorf("decode failed")
 	}
 
 	return clearResult, nil
