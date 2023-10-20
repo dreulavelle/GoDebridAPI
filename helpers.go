@@ -1,4 +1,4 @@
-package main
+package GoDebridAPI
 
 import (
 	"encoding/json"

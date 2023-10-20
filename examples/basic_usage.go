@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	// "github.com/dreulavelle/GoDebridAPI/api"   // Be sure to import this!
+	// "github.com/dreulavelle/GoDebridAPI"   // Be sure to import this!
 )
 
 func main() {
