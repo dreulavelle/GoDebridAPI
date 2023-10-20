@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
-	// "github.com/dreulavelle/GoDebridAPI"   // Be sure to import this!
+
+	"github.com/dreulavelle/GoDebridAPI" // Be sure to import this!
 )
 
 func main() {
 	// Initialize the client
-	client := api.HttpClient(api.GetApiKey())
+	client := GoDebridAPI.HttpClient(GoDebridAPI.GetApiKey())
 
 	// Fetch user details
 	user, err := client.RdGetUser()
